@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#05030b">
+<title>For Piki 🌸</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{background:#05030b;font-family:Georgia,serif;color:white}
+#sky{position:fixed;inset:0;overflow:hidden;background:
+ radial-gradient(circle at 50% 72%,rgba(183,50,139,.18),transparent 48%),
+ linear-gradient(#02030a 0%,#090617 58%,#101b13 100%)}
+.star{position:absolute;width:2px;height:2px;border-radius:50%;background:white;box-shadow:0 0 6px white;animation:twinkle var(--d) ease-in-out infinite alternate}
+@keyframes twinkle{from{opacity:.2;transform:scale(.7)}to{opacity:1;transform:scale(1.5)}}
+#moon{position:absolute;right:13%;top:10%;width:42px;height:42px;border-radius:50%;background:#fff3d7;box-shadow:0 0 35px 12px rgba(255,235,200,.12)}
+#ground{position:absolute;left:-10%;bottom:-10%;width:120%;height:30%;background:radial-gradient(ellipse at center,rgba(30,91,49,.5),transparent 68%)}
+#garden{position:absolute;inset:0;z-index:2}
+.flower{position:absolute;bottom:-4%;width:70px;height:58%;transform-origin:50% 100%;animation:grow 2.4s cubic-bezier(.16,1,.3,1) forwards;animation-delay:var(--delay);transform:scaleY(0);filter:drop-shadow(0 0 5px rgba(255,100,190,.2))}
+@keyframes grow{0%{transform:scaleY(0) rotate(-2deg)}70%{transform:scaleY(1.04) rotate(1deg)}100%{transform:scaleY(1) rotate(0)}}
+.stem{position:absolute;bottom:0;left:50%;width:4px;height:82%;transform:translateX(-50%);border-radius:5px;background:linear-gradient(#8ee69c,#3a9b5c 45%,#205d39);box-shadow:0 0 7px #48bb70}
+.leaf{position:absolute;width:38px;height:14px;background:#45ad69;border-radius:100% 0 100% 0;box-shadow:0 0 7px rgba(80,220,125,.35)}
+.l1{left:7%;bottom:38%;transform:rotate(-30deg)}.l2{right:5%;bottom:51%;transform:scaleX(-1) rotate(-30deg)}
+.head{position:absolute;left:50%;top:0;width:100px;height:100px;transform:translateX(-50%);animation:sway 3s ease-in-out infinite alternate}
+@keyframes sway{from{transform:translateX(-50%) rotate(-2deg)}to{transform:translateX(-50%) rotate(2deg)}}
+.petal{position:absolute;left:50%;top:50%;width:38px;height:58px;border-radius:50%;transform-origin:50% 100%;transform:translate(-50%,-100%) rotate(var(--a)) translateY(-18px);
+background:radial-gradient(circle at 50% 75%,#fff8fc 0 9%,var(--light) 25%,var(--main) 62%,var(--dark) 100%);box-shadow:0 0 13px var(--glow)}
+.core{position:absolute;left:50%;top:50%;width:27px;height:27px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#fffbd0 0 22%,#ffd45b 40%,#e99327 72%,transparent 73%);box-shadow:0 0 20px #ffd35e}
+.firefly{position:absolute;width:7px;height:7px;border-radius:50%;background:#ffe68c;box-shadow:0 0 12px 5px rgba(255,214,100,.55);animation:fly var(--d) ease-in-out infinite alternate}
+@keyframes fly{to{transform:translate(var(--x),var(--y));opacity:.3}}
+#message{position:absolute;z-index:10;left:50%;top:42%;width:92%;text-align:center;opacity:0;transform:translate(-50%,-50%) scale(.9);transition:opacity 2s ease,transform 2s cubic-bezier(.16,1,.3,1);text-shadow:0 0 20px rgba(255,110,195,.7)}
+#message.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.title{font-size:clamp(30px,8vw,56px);line-height:1.1}
+.sub{font-family:Arial,sans-serif;font-size:clamp(16px,4.5vw,24px);margin-top:20px;line-height:1.5}
+.heart{color:#ff8cc9;text-shadow:0 0 16px #ff55b1;display:inline-block;animation:beat 1.5s infinite}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.18)}30%{transform:scale(1)}42%{transform:scale(1.08)}}
+#flash{position:absolute;z-index:20;inset:0;background:white;opacity:0;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="sky"><div id="moon"></div><div id="stars"></div><div id="ground"></div></div>
+<div id="garden"></div>
+<div id="flash"></div>
+<div id="message"><div class="title">Happy birthday Piki!</div><div class="sub">I hope your day is as beautiful as you are <span class="heart">♥</span></div></div>
+
+<script>
+const garden=document.getElementById('garden'),stars=document.getElementById('stars'),flash=document.getElementById('flash'),message=document.getElementById('message');
+
+for(let i=0;i<95;i++){
+ const s=document.createElement('i');s.className='star';
+ s.style.left=Math.random()*100+'%';s.style.top=Math.random()*72+'%';
+ s.style.setProperty('--d',(1.2+Math.random()*3)+'s');s.style.animationDelay=(-Math.random()*3)+'s';stars.appendChild(s);
+}
+
+const palettes=[
+ ['#ffacd7','#ff4ca8','#a92d78','#ff74bd'],
+ ['#ffe99d','#ff9d30','#d56520','#ffc35c'],
+ ['#d7b2ff','#9854e8','#6530a5','#bc83ff']
+];
+
+function addFlower(i,x,size,height,delay,front=false){
+ const f=document.createElement('div');f.className='flower';
+ f.style.left=`calc(${x}% - ${size/2}px)`;f.style.width=size+'px';f.style.height=height+'%';
+ f.style.setProperty('--delay',delay+'s');
+ const p=palettes[i%3];f.style.setProperty('--main',p[0]);f.style.setProperty('--light',p[1]);f.style.setProperty('--dark',p[2]);f.style.setProperty('--glow',p[3]);
+ f.innerHTML='<div class="stem"></div><div class="leaf l1"></div><div class="leaf l2"></div><div class="head"></div>';
+ const head=f.querySelector('.head');
+ for(let j=0;j<7;j++){const q=document.createElement('div');q.className='petal';q.style.setProperty('--a',(j*360/7)+'deg');head.appendChild(q)}
+ const core=document.createElement('div');core.className='core';head.appendChild(core);
+ garden.appendChild(f);
+}
+
+// Large, clearly visible flowers. Background row first, foreground row second.
+for(let i=0;i<15;i++) addFlower(i,4+i*6.6,34+Math.random()*9,31+Math.random()*22,0.5+i*.13);
+for(let i=0;i<6;i++) addFlower(i+1,10+i*16,53+Math.random()*8,20+Math.random()*10,1.25+i*.08,true);
+
+// Fireflies are DOM elements too, so no canvas/browser rendering dependency.
+for(let i=0;i<28;i++){
+ const b=document.createElement('i');b.className='firefly';
+ b.style.left=Math.random()*100+'%';b.style.top=(28+Math.random()*55)+'%';
+ b.style.setProperty('--x',(Math.random()*100-50)+'px');b.style.setProperty('--y',(Math.random()*100-50)+'px');
+ b.style.setProperty('--d',(2+Math.random()*3)+'s');b.style.animationDelay=(-Math.random()*3)+'s';garden.appendChild(b);
+}
+
+setTimeout(()=>{
+ flash.style.transition='opacity 1.5s ease';flash.style.opacity='.14';
+ setTimeout(()=>flash.style.opacity='0',180);
+},7200);
+
+setTimeout(()=>message.classList.add('show'),8200);
+</script>
+</body>
+</html>
